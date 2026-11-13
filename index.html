@@ -33,6 +33,7 @@ nav button{flex:1;border:0;background:none;color:var(--mu);font-size:12px;paddin
 .btn:active,.ib:active,.seg button:active,nav button:active{transform:scale(.96)}
 body.big{font-size:19px}body.big input,body.big select{font-size:22px}body.big .btn{font-size:21px}body.big nav button{font-size:14px}body.big .item small,body.big td,body.big th{font-size:16px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
+@media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}nav,#lg,#inst,.np,.btn,.toast{display:none!important}body{padding:0;background:#fff}.card{box-shadow:none;animation:none;break-inside:avoid}header{padding:10px 16px 22px}}
 </style></head><body>
 <header><svg viewBox="0 0 64 64" width="50" height="50" aria-label="Cow logo" style="flex:none"><circle cx="32" cy="32" r="31" fill="#fff6dc" stroke="#e0b84a" stroke-width="2.5"/><path d="M17 20c-4-6-1-11 2-12 0 4 2 7 5 9z" fill="#f2d28b" stroke="#a77b1f"/><path d="M47 20c4-6 1-11-2-12 0 4-2 7-5 9z" fill="#f2d28b" stroke="#a77b1f"/><ellipse cx="12" cy="26" rx="7" ry="4" transform="rotate(-20 12 26)" fill="#8b5a2b"/><ellipse cx="52" cy="26" rx="7" ry="4" transform="rotate(20 52 26)" fill="#8b5a2b"/><path d="M19 18h26c3 0 5 3 4 7l-3 14c-1 4-4 6-8 6H26c-4 0-7-2-8-6l-3-14c-1-4 1-7 4-7z" fill="#fff" stroke="#5a3a1a" stroke-width="1.5"/><path d="M19 18h11c-1 5-3 8-9 10l-4-2c-1-4 0-8 2-8z" fill="#5a3a1a"/><ellipse cx="32" cy="46" rx="12" ry="8" fill="#f6b8b8" stroke="#5a3a1a" stroke-width="1.5"/><circle cx="28" cy="46" r="1.9" fill="#5a3a1a"/><circle cx="36" cy="46" r="1.9" fill="#5a3a1a"/><circle cx="25" cy="31" r="2.6" fill="#fff"/><circle cx="39" cy="31" r="2.6" fill="#222"/><circle cx="25" cy="31" r="1.3" fill="#222"/></svg><h1 id="ttl">My Dairy</h1><button id="lg"></button><button id="inst" hidden>⬇ Install</button></header>
 <main id="app"></main>
@@ -58,7 +59,7 @@ function title(){$('ttl').textContent=(S.name||'My Dairy');document.title=S.name
 function nav(){var t=[['entry','🥛','Milk'],['feed','🌾','Feed'],['report','📊','Report'],['set','⚙️','Settings']];
  $('nav').innerHTML=t.map(function(x){return '<button class="'+(tab==x[0]?'on':'')+'" onclick="go(\''+x[0]+'\')"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')}
 function go(t){tab=t;render()}
-function perBar(){var r=range();return '<div class="card"><div class="row"><div><label>Month</label><input type="month" value="'+P.ym+'" onchange="P.ym=this.value||P.ym;pc()"></div><div><label>Period</label><select onchange="P.h=+this.value;pc()"><option value="1"'+(P.h==1?' selected':'')+'>1 to 15</option><option value="2"'+(P.h==2?' selected':'')+'>16 to end</option></select></div></div><div style="margin-top:8px;color:var(--mu);font-size:13px">'+fd(r[0])+' – '+fd(r[1])+'</div></div>'}
+function perBar(){var r=range();return '<div class="card np"><div class="row"><div><label>Month</label><input type="month" value="'+P.ym+'" onchange="P.ym=this.value||P.ym;pc()"></div><div><label>Period</label><select onchange="P.h=+this.value;pc()"><option value="1"'+(P.h==1?' selected':'')+'>1 to 15</option><option value="2"'+(P.h==2?' selected':'')+'>16 to end</option></select></div></div><div style="margin-top:8px;color:var(--mu);font-size:13px">'+fd(r[0])+' – '+fd(r[1])+'</div></div>'}
 function pc(){var r=range();if(!inP(F.d))F.d=r[0];if(!inP(G.d))G.d=r[0];render()}
 function shiftDay(o,n){var p=o.d.split('-'),d=new Date(+p[0],+p[1]-1,+p[2]+n);o.d=iso(d);render()}
 function render(){nav();title();if(!S.name&&tab!='set'){tab='set'}
@@ -105,7 +106,7 @@ function calc(){var c={ml:0,ma:0,el:0,ea:0,nr:0,days:{},fq:0,fa:0,fnr:0};
  S.feeds.filter(function(e){return inP(e.d)}).forEach(function(e){c.fq+=(e.q||1);c.fa+=fa(e);if(!e.r)c.fnr++});
  c.sale=c.ma+c.ea;c.profit=c.sale-c.fa;return c}
 function report(){var c=calc(),r=range(),ds=Object.keys(c.days).sort();
- return rateBox()+'<div class="card"><h2>📊 Report '+fd(r[0])+' – '+fd(r[1])+'</h2><div class="grid">'+
+ return rateBox()+'<div class="card"><h2>📊 Report '+fd(r[0])+' – '+fd(r[1])+'</h2>'+(FR()?'<div style="margin:-4px 0 8px;color:var(--mu)">Final rate: <b>₹'+FR()+' / L</b></div>':'')+'<div class="grid">'+
  '<div class="st"><span>🌅 Morning milk</span><b>'+lit(c.ml)+'</b></div><div class="st"><span>🌅 Morning sale</span><b>'+money(c.ma)+'</b></div>'+
  '<div class="st"><span>🌙 Evening milk</span><b>'+lit(c.el)+'</b></div><div class="st"><span>🌙 Evening sale</span><b>'+money(c.ea)+'</b></div>'+
  '<div class="st"><span>Total milk</span><b>'+lit(c.ml+c.el)+'</b></div><div class="st"><span>Total milk sale</span><b>'+money(c.sale)+'</b></div>'+
@@ -113,10 +114,10 @@ function report(){var c=calc(),r=range(),ds=Object.keys(c.days).sort();
  '<div class="st big'+(c.profit<0?' neg':'')+'"><span>Actual profit (sale − feed)</span><b>'+money(c.profit)+'</b></div></div>'+
  (c.nr?'<div class="warn">⚠ '+c.nr+' milk entries have no rate – only liters counted, not in sale.</div>':'')+(c.fnr?'<div class="warn">⚠ '+c.fnr+' feed entries have no price – not included, profit may be higher than real.</div>':'')+
  chart(c,ds)+'<button class="btn" onclick="shr()">💬 Share on WhatsApp</button><button class="btn sec" onclick="dl()">⬇ Download report (Excel/CSV)</button><button class="btn sec" onclick="window.print()">🖨 Print / Save PDF</button></div>'+
- '<div class="card"><h2>Day-wise</h2><div class="tw"><table><tr><th>Date</th><th>M (L)</th><th>M ₹</th><th>E (L)</th><th>E ₹</th></tr>'+(ds.length?ds.map(function(d){var x=c.days[d];return '<tr><td>'+fd(d)+'</td><td>'+x.ml+'</td><td>'+x.ma+'</td><td>'+x.el+'</td><td>'+x.ea+'</td></tr>'}).join(''):'<tr><td colspan="5" class="empty">No data</td></tr>')+'</table></div></div>'}
+ '<div class="card"><h2>Day-wise</h2><div class="tw"><table><tr><th>Date</th><th>🌅 L</th><th>🌅 ₹</th><th>🌙 L</th><th>🌙 ₹</th></tr>'+(ds.length?ds.map(function(d){var x=c.days[d];return '<tr><td>'+fd(d)+'</td><td>'+rd(x.ml)+'</td><td>'+rd(x.ma)+'</td><td>'+rd(x.el)+'</td><td>'+rd(x.ea)+'</td></tr>'}).join(''):'<tr><td colspan="5" class="empty">No data</td></tr>')+'</table></div></div>'}
 function dl(){var c=calc(),r=range(),q=function(s){return '"'+String(tx(s)).replace(/"/g,'""')+'"'},
  R=[[S.name],['Report',fd(r[0])+' to '+fd(r[1])],FR()?['Final rate',FR()]:[],[],['Date','Shift','Liters','Rate','Amount']];
- S.entries.filter(function(e){return inP(e.d)}).sort(function(a,b){return a.d<b.d?-1:a.d>b.d?1:(a.s>b.s?-1:1)}).forEach(function(e){R.push([fd(e.d),e.s=='M'?'Morning':'Evening',e.l,e.r||'',e.r?e.l*e.r:''])});
+ S.entries.filter(function(e){return inP(e.d)}).sort(function(a,b){return a.d<b.d?-1:a.d>b.d?1:(a.s>b.s?-1:1)}).forEach(function(e){var rt=FR()||e.r;R.push([fd(e.d),e.s=='M'?'Morning':'Evening',e.l,rt||'',rt?rd(e.l*rt):''])});
  R.push([],['Morning liters',c.ml,'','Morning sale',c.ma],['Evening liters',c.el,'','Evening sale',c.ea],['Total liters',c.ml+c.el,'','Total sale',c.sale],[],['Feed date','Feed name','Qty','Rate','Amount']);
  S.feeds.filter(function(e){return inP(e.d)}).forEach(function(e){R.push([fd(e.d),e.n||'',e.q||1,e.r||'',fa(e)||''])});
  R.push(['Feed total','','','',c.fa],[],['ACTUAL PROFIT','','','',c.profit]);
@@ -142,9 +143,10 @@ function chart(c,ds){if(!ds.length)return '';var mx=1;ds.forEach(function(d){var
 function shr(){var c=calc(),r=range(),t=(S.name||'My Dairy')+'\n'+fd(r[0])+' - '+fd(r[1])+'\n🌅 '+tx('Morning')+': '+lit(c.ml)+' = '+money(c.ma)+'\n🌙 '+tx('Evening')+': '+lit(c.el)+' = '+money(c.ea)+'\n🥛 '+tx('Total milk')+': '+lit(c.ml+c.el)+' = '+money(c.sale)+'\n🌾 '+tx('Feed cost')+': '+money(c.fa)+'\n💰 '+tx('ACTUAL PROFIT')+': '+money(c.profit);
  if(navigator.share)navigator.share({text:t}).catch(function(){});else window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank')}
 [['Final rate ₹/L (applies to all milk in this period)','अंतिम दर ₹/लि (या कालावधीतील सर्व दुधाला लागू)','अंतिम दर ₹/ली (इस अवधि के सारे दूध पर लागू)'],['Final rate','अंतिम दर','अंतिम दर'],['Using final rate for all milk','सर्व दुधाला अंतिम दर वापरला आहे','सारे दूध पर अंतिम दर लगा है'],['Empty = per-entry rates are used','रिकामे = प्रत्येक नोंदीचा दर वापरला जातो','खाली = हर एंट्री का दर लगता है'],['Quantity (1, 2, 3…)','संख्या (1, 2, 3…)','संख्या (1, 2, 3…)'],['Rate ₹ (optional)','दर ₹ (ऐच्छिक)','दर ₹ (वैकल्पिक)'],['Enter rate','दर टाका','दर डालें'],['Qty','संख्या','संख्या']].forEach(function(r){D.mr[r[0]]=r[1];D.hi[r[0]]=r[2]});
+function rd(n){return Math.round(n*100)/100}
 function FR(){return (S.fr&&S.fr[P.ym+'-'+P.h])||0}
 function setFR(v){v=parseFloat(v);S.fr=S.fr||{};var k=P.ym+'-'+P.h;if(v>0)S.fr[k]=v;else delete S.fr[k];save();toast('Saved ✔');render()}
-function rateBox(){return '<div class="card" style="border:2px solid var(--pr)"><h2>🏷 Final rate</h2><label>Final rate ₹/L (applies to all milk in this period)</label><div class="row"><input id="fr2" inputmode="decimal" value="'+(FR()||'')+'" placeholder="Don’t know" onchange="setFR(this.value)"><button class="btn sm" style="flex:0 0 64px" onclick="setFR($(\'fr2\').value)">✔</button></div><div style="font-size:13px;color:var(--mu);margin-top:6px">'+(FR()?'Using final rate for all milk':'Empty = per-entry rates are used')+'</div></div>'}
+function rateBox(){return '<div class="card np" style="border:2px solid var(--pr)"><h2>🏷 Final rate</h2><label>Final rate ₹/L (applies to all milk in this period)</label><div class="row"><input id="fr2" inputmode="decimal" value="'+(FR()||'')+'" placeholder="Don’t know" onchange="setFR(this.value)"><button class="btn sm" style="flex:0 0 64px" onclick="setFR($(\'fr2\').value)">✔</button></div><div style="font-size:13px;color:var(--mu);margin-top:6px">'+(FR()?'Using final rate for all milk':'Empty = per-entry rates are used')+'</div></div>'}
 function gpt(){var q=parseFloat(G.q)||1,r=parseFloat(G.r);return r>0?q+' × ₹'+r+' = '+money(q*r):'Enter rate'}
 function gp(){$('gp').textContent=tx(gpt())}
 function keys(l){return KS[l]||(KS[l]=Object.keys(D[l]).sort(function(a,b){return b.length-a.length}))}
