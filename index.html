@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Dairy</title>
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon-192.png"><meta name="theme-color" content="#2e7d32">
+<style>
+:root{--bg:#f6f1e0;--card:#fffdf6;--tx:#2a2a1a;--mu:#6b6a55;--pr:#2e7d32;--pr2:#e8f1d4;--bd:#e3dbbc;--rd:#c0392b;--am:#b7791f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#111a13;--card:#1a251c;--tx:#e8f1ea;--mu:#9ab;--pr:#4cc36f;--pr2:#223a28;--bd:#2c3d2f;--rd:#ff7b6b;--am:#f0b95a}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg) radial-gradient(circle at 1px 1px,rgba(110,140,50,.14) 1px,transparent 0) 0 0/22px 22px;color:var(--tx);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:84px}
+header{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 20' preserveAspectRatio='none'%3E%3Cpath d='M0 20V12C50 2 110 18 190 9S330 1 400 10V20Z' fill='%231b5e20' fill-opacity='.45'/%3E%3C/svg%3E") bottom/100% 20px no-repeat,linear-gradient(#43a047,#2e7d32);color:#fff;padding:12px 16px 26px;display:flex;align-items:center;gap:10px}
+header h1{font-size:19px;margin:0;flex:1}header button{background:#fff3;color:#fff;border:0;border-radius:10px;padding:8px 10px;font-size:14px}
+main{max-width:640px;margin:0 auto;padding:12px}
+.card{background:var(--card);border:1px solid var(--bd);box-shadow:0 2px 0 rgba(120,100,40,.1);border-radius:16px;padding:14px;margin-bottom:12px}
+h2{font-size:17px;margin:0 0 10px}label{display:block;font-size:13px;color:var(--mu);margin:8px 0 4px}
+input,select{width:100%;font-size:18px;padding:12px;border:1px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx)}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.seg{display:flex;gap:8px}.seg button{flex:1;padding:14px 6px;font-size:17px;border:2px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:12px}
+.seg button.on{background:var(--pr);border-color:var(--pr);color:#fff;font-weight:600}
+.btn{width:100%;margin-top:12px;padding:15px;font-size:18px;font-weight:600;border:0;border-radius:12px;background:var(--pr);color:#fff}
+.btn.sec{background:var(--pr2);color:var(--pr)}.btn.sm{width:auto;margin:0;padding:8px 12px;font-size:14px}
+.prev{margin-top:10px;padding:10px;border-radius:10px;background:var(--pr2);color:var(--pr);font-weight:600;text-align:center}
+.item{display:flex;align-items:center;gap:8px;padding:10px 0;border-top:1px solid var(--bd)}.item:first-of-type{border-top:0}
+.item .m{flex:1}.item small{color:var(--mu);display:block}.ib{border:0;background:var(--pr2);color:var(--pr);border-radius:8px;padding:8px 10px;font-size:14px}.ib.d{color:var(--rd)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.st{background:var(--pr2);border-radius:12px;padding:10px}.st b{display:block;font-size:20px}.st span{font-size:12px;color:var(--mu)}
+.big{grid-column:1/3;text-align:center}.big b{font-size:26px}.neg b{color:var(--rd)}.warn{color:var(--am);font-size:13px;margin-top:6px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:7px 5px;text-align:right;border-bottom:1px solid var(--bd);white-space:nowrap}th:first-child,td:first-child{text-align:left}th{color:var(--mu);font-weight:600}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--bd);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
+nav button{flex:1;border:0;background:none;color:var(--mu);font-size:12px;padding:6px 2px}nav button span{display:block;font-size:22px}nav button.on{color:var(--pr);font-weight:700}
+.toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:20px;font-size:14px;z-index:9}
+.empty{color:var(--mu);text-align:center;padding:14px}
+</style></head><body>
+<header><svg viewBox="0 0 64 64" width="50" height="50" aria-label="Cow logo" style="flex:none"><circle cx="32" cy="32" r="31" fill="#fff6dc" stroke="#e0b84a" stroke-width="2.5"/><path d="M17 20c-4-6-1-11 2-12 0 4 2 7 5 9z" fill="#f2d28b" stroke="#a77b1f"/><path d="M47 20c4-6 1-11-2-12 0 4-2 7-5 9z" fill="#f2d28b" stroke="#a77b1f"/><ellipse cx="12" cy="26" rx="7" ry="4" transform="rotate(-20 12 26)" fill="#8b5a2b"/><ellipse cx="52" cy="26" rx="7" ry="4" transform="rotate(20 52 26)" fill="#8b5a2b"/><path d="M19 18h26c3 0 5 3 4 7l-3 14c-1 4-4 6-8 6H26c-4 0-7-2-8-6l-3-14c-1-4 1-7 4-7z" fill="#fff" stroke="#5a3a1a" stroke-width="1.5"/><path d="M19 18h11c-1 5-3 8-9 10l-4-2c-1-4 0-8 2-8z" fill="#5a3a1a"/><ellipse cx="32" cy="46" rx="12" ry="8" fill="#f6b8b8" stroke="#5a3a1a" stroke-width="1.5"/><circle cx="28" cy="46" r="1.9" fill="#5a3a1a"/><circle cx="36" cy="46" r="1.9" fill="#5a3a1a"/><circle cx="25" cy="31" r="2.6" fill="#fff"/><circle cx="39" cy="31" r="2.6" fill="#222"/><circle cx="25" cy="31" r="1.3" fill="#222"/></svg><h1 id="ttl">My Dairy</h1><button id="lg"></button><button id="inst" hidden>⬇ Install</button></header>
+<main id="app"></main>
+<nav id="nav"></nav>
+<script>
+var KEY='dairy_v1',S={name:'',entries:[],feeds:[]},mem=null;
+try{var raw=localStorage.getItem(KEY);if(raw)S=JSON.parse(raw)}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+var $=function(i){return document.getElementById(i)};
+function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function fd(s){var p=s.split('-');return p[2]+'/'+p[1]+'/'+p[0]}
+function esc(s){return String(s||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function money(n){return '₹'+(Math.round(n*100)/100).toLocaleString('en-IN')}
+function lit(n){return (Math.round(n*100)/100)+' L'}
+function autoShift(){return new Date().getHours()<12?'M':'E'}
+var now=new Date(),tab='entry',P={ym:iso(now).slice(0,7),h:now.getDate()<=15?1:2},
+F={id:null,d:iso(now),s:autoShift(),l:'',r:''},G={id:null,d:iso(now),q:'',r:'',n:''},dip=null;
+function range(){var y=+P.ym.slice(0,4),m=+P.ym.slice(5),last=new Date(y,m,0).getDate();
+ return P.h==1?[P.ym+'-01',P.ym+'-15']:[P.ym+'-16',P.ym+'-'+String(last)]}
+function inP(d){var r=range();return d>=r[0]&&d<=r[1]}
+function toast(t){var e=document.createElement('div');e.className='toast';e.textContent=tx(t);document.body.appendChild(e);setTimeout(function(){e.remove()},1800)}
+function title(){$('ttl').textContent=(S.name||'My Dairy');document.title=S.name||'My Dairy'}
+function nav(){var t=[['entry','🥛','Milk'],['feed','🌾','Feed'],['report','📊','Report'],['set','⚙️','Settings']];
+ $('nav').innerHTML=t.map(function(x){return '<button class="'+(tab==x[0]?'on':'')+'" onclick="go(\''+x[0]+'\')"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join('')}
+function go(t){tab=t;render()}
+function perBar(){var r=range();return '<div class="card"><div class="row"><div><label>Month</label><input type="month" value="'+P.ym+'" onchange="P.ym=this.value||P.ym;pc()"></div><div><label>Period</label><select onchange="P.h=+this.value;pc()"><option value="1"'+(P.h==1?' selected':'')+'>1 to 15</option><option value="2"'+(P.h==2?' selected':'')+'>16 to end</option></select></div></div><div style="margin-top:8px;color:var(--mu);font-size:13px">'+fd(r[0])+' – '+fd(r[1])+'</div></div>'}
+function pc(){var r=range();if(!inP(F.d))F.d=r[0];if(!inP(G.d))G.d=r[0];render()}
+function shiftDay(o,n){var p=o.d.split('-'),d=new Date(+p[0],+p[1]-1,+p[2]+n);o.d=iso(d);render()}
+function render(){nav();title();if(!S.name&&tab!='set'){tab='set'}
+ var h='';
+ if(tab=='entry')h=today()+perBar()+entryForm()+entryList();
+ else if(tab=='feed')h=perBar()+feedForm()+feedList();
+ else if(tab=='report')h=perBar()+report();
+ else h=settings();
+ $('app').innerHTML=h;lang()}
+function dateBox(o,k){return '<label>Date (DD/MM/YYYY): <b>'+fd(o.d)+'</b></label><div class="row"><button class="ib" style="flex:0 0 52px" onclick="shiftDay('+k+',-1)">◀</button><input type="date" value="'+o.d+'" onchange="'+k+'.d=this.value||'+k+'.d;render()"><button class="ib" style="flex:0 0 52px" onclick="shiftDay('+k+',1)">▶</button></div>'}
+function entryForm(){var a=F.l*F.r;
+ return '<div class="card"><h2>'+(F.id?'✏️ Edit milk entry':'➕ Add milk')+'</h2>'+dateBox(F,'F')+
+ '<label>Time</label><div class="seg"><button class="'+(F.s=='M'?'on':'')+'" onclick="F.s=\'M\';keep();render()">🌅 Morning</button><button class="'+(F.s=='E'?'on':'')+'" onclick="F.s=\'E\';keep();render()">🌙 Evening</button></div>'+
+ '<div class="row"><div><label>Milk (liters)</label><input id="fl" inputmode="decimal" placeholder="0" value="'+F.l+'" oninput="F.l=this.value;pv()"></div><div><label>Rate ₹/L (optional)</label><input id="fr" inputmode="decimal" placeholder="Don’t know" value="'+F.r+'" oninput="F.r=this.value;pv()"></div></div>'+
+ '<div class="prev" id="pv">'+pvt()+'</div><button class="btn" onclick="addE()">'+(F.id?'Update':'Save')+'</button>'+(F.id?'<button class="btn sec" onclick="F.id=null;F.l=F.r=\'\';render()">Cancel</button>':'')+'</div>'}
+function keep(){var a=$('fl'),b=$('fr');if(a)F.l=a.value;if(b)F.r=b.value}
+function pvt(){var l=parseFloat(F.l),r=parseFloat(F.r);if(!(l>0))return 'Enter liters';return r>0?lit(l)+' × ₹'+r+' = '+money(l*r):lit(l)+' (rate not set)'}
+function pv(){$('pv').textContent=pvt()}
+function addE(){var l=parseFloat(F.l),r=parseFloat(F.r);if(!(l>0)){toast('Enter milk liters');return}
+ var o={id:F.id||Date.now().toString(36),d:F.d,s:F.s,l:l,r:r>0?r:0};
+ if(F.id){S.entries=S.entries.map(function(e){return e.id==F.id?o:e})}else S.entries.push(o);
+ save();F.id=null;F.l=F.r='';toast('Saved ✔');render()}
+function editE(id){var e=S.entries.find(function(x){return x.id==id});F={id:id,d:e.d,s:e.s,l:String(e.l),r:e.r?String(e.r):''};render();window.scrollTo(0,0)}
+function delE(id){if(confirm('Delete this entry?')){S.entries=S.entries.filter(function(e){return e.id!=id});save();render()}}
+function entryList(){var L=S.entries.filter(function(e){return inP(e.d)}).sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:(a.s<b.s?1:-1)});
+ return '<div class="card"><h2>Entries ('+L.length+')</h2>'+(L.length?L.map(function(e){return '<div class="item"><div class="m"><b>'+fd(e.d)+' · '+(e.s=='M'?'🌅 Morning':'🌙 Evening')+'</b><small>'+lit(e.l)+(e.r?' × ₹'+e.r+' = '+money(e.l*e.r):' · rate not set')+'</small></div><button class="ib" onclick="editE(\''+e.id+'\')">Edit</button><button class="ib d" onclick="delE(\''+e.id+'\')">✕</button></div>'}).join(''):'<div class="empty">No entries in this period</div>')+'</div>'}
+function feedForm(){var l=parseFloat(G.q),r=parseFloat(G.r);
+ return '<div class="card"><h2>'+(G.id?'✏️ Edit cattle feed':'🌾 Add cattle feed')+'</h2>'+dateBox(G,'G')+
+ '<label>Feed name</label><input value="'+esc(G.n)+'" oninput="G.n=this.value" placeholder="e.g. Sarki, Chuni, Gold">'+
+ '<label>Price ₹ (optional)</label><input inputmode="decimal" value="'+G.r+'" oninput="G.r=this.value" placeholder="Don’t know">'+
+ '<button class="btn" onclick="addG()">'+(G.id?'Update':'Save')+'</button>'+(G.id?'<button class="btn sec" onclick="G={id:null,d:G.d,q:\'\',r:\'\',n:\'\'};render()">Cancel</button>':'')+'</div>'}
+function addG(){var r=parseFloat(G.r);if(!G.n.trim()){toast('Enter feed name');return}
+ var o={id:G.id||Date.now().toString(36),d:G.d,r:r>0?r:0,n:G.n.trim()};
+ if(G.id){S.feeds=S.feeds.map(function(e){return e.id==G.id?o:e})}else S.feeds.push(o);
+ save();G={id:null,d:G.d,q:'',r:'',n:''};toast('Saved ✔');render()}
+function editG(id){var e=S.feeds.find(function(x){return x.id==id});G={id:id,d:e.d,q:'',r:e.r?String(e.r*(e.q||1)):'',n:e.n||''};render();window.scrollTo(0,0)}
+function delG(id){if(confirm('Delete this feed entry?')){S.feeds=S.feeds.filter(function(e){return e.id!=id});save();render()}}
+function feedList(){var L=S.feeds.filter(function(e){return inP(e.d)}).sort(function(a,b){return a.d<b.d?1:-1});
+ return '<div class="card"><h2>Feed entries ('+L.length+')</h2>'+(L.length?L.map(function(e){return '<div class="item"><div class="m"><b>'+esc(e.n||'Feed')+'</b><small>'+fd(e.d)+' · '+(e.r?money(fa(e)):'price not set')+'</small></div><button class="ib" onclick="editG(\''+e.id+'\')">Edit</button><button class="ib d" onclick="delG(\''+e.id+'\')">✕</button></div>'}).join(''):'<div class="empty">No feed entries in this period</div>')+'</div>'}
+function fa(e){return e.r?e.r*(e.q||1):0}
+function calc(){var c={ml:0,ma:0,el:0,ea:0,nr:0,days:{},fq:0,fa:0,fnr:0};
+ S.entries.filter(function(e){return inP(e.d)}).forEach(function(e){var a=e.l*(e.r||0),D=c.days[e.d]=c.days[e.d]||{ml:0,ma:0,el:0,ea:0};
+  if(!e.r)c.nr++;if(e.s=='M'){c.ml+=e.l;c.ma+=a;D.ml+=e.l;D.ma+=a}else{c.el+=e.l;c.ea+=a;D.el+=e.l;D.ea+=a}});
+ S.feeds.filter(function(e){return inP(e.d)}).forEach(function(e){c.fq++;c.fa+=fa(e);if(!e.r)c.fnr++});
+ c.sale=c.ma+c.ea;c.profit=c.sale-c.fa;return c}
+function report(){var c=calc(),r=range(),ds=Object.keys(c.days).sort();
+ return '<div class="card"><h2>📊 Report '+fd(r[0])+' – '+fd(r[1])+'</h2><div class="grid">'+
+ '<div class="st"><span>🌅 Morning milk</span><b>'+lit(c.ml)+'</b></div><div class="st"><span>🌅 Morning sale</span><b>'+money(c.ma)+'</b></div>'+
+ '<div class="st"><span>🌙 Evening milk</span><b>'+lit(c.el)+'</b></div><div class="st"><span>🌙 Evening sale</span><b>'+money(c.ea)+'</b></div>'+
+ '<div class="st"><span>Total milk</span><b>'+lit(c.ml+c.el)+'</b></div><div class="st"><span>Total milk sale</span><b>'+money(c.sale)+'</b></div>'+
+ '<div class="st"><span>🌾 Feed items</span><b>'+c.fq+'</b></div><div class="st"><span>🌾 Feed cost</span><b>'+money(c.fa)+'</b></div>'+
+ '<div class="st big'+(c.profit<0?' neg':'')+'"><span>Actual profit (sale − feed)</span><b>'+money(c.profit)+'</b></div></div>'+
+ (c.nr?'<div class="warn">⚠ '+c.nr+' milk entries have no rate – only liters counted, not in sale.</div>':'')+(c.fnr?'<div class="warn">⚠ '+c.fnr+' feed entries have no price – not included, profit may be higher than real.</div>':'')+
+ '<button class="btn" onclick="dl()">⬇ Download report (Excel/CSV)</button><button class="btn sec" onclick="window.print()">🖨 Print / Save PDF</button></div>'+
+ '<div class="card"><h2>Day-wise</h2><div class="tw"><table><tr><th>Date</th><th>M (L)</th><th>M ₹</th><th>E (L)</th><th>E ₹</th></tr>'+(ds.length?ds.map(function(d){var x=c.days[d];return '<tr><td>'+fd(d)+'</td><td>'+x.ml+'</td><td>'+x.ma+'</td><td>'+x.el+'</td><td>'+x.ea+'</td></tr>'}).join(''):'<tr><td colspan="5" class="empty">No data</td></tr>')+'</table></div></div>'}
+function dl(){var c=calc(),r=range(),q=function(s){return '"'+String(tx(s)).replace(/"/g,'""')+'"'},
+ R=[[S.name],['Report',fd(r[0])+' to '+fd(r[1])],[],['Date','Shift','Liters','Rate','Amount']];
+ S.entries.filter(function(e){return inP(e.d)}).sort(function(a,b){return a.d<b.d?-1:a.d>b.d?1:(a.s>b.s?-1:1)}).forEach(function(e){R.push([fd(e.d),e.s=='M'?'Morning':'Evening',e.l,e.r||'',e.r?e.l*e.r:''])});
+ R.push([],['Morning liters',c.ml,'','Morning sale',c.ma],['Evening liters',c.el,'','Evening sale',c.ea],['Total liters',c.ml+c.el,'','Total sale',c.sale],[],['Feed date','Feed name','','','Price']);
+ S.feeds.filter(function(e){return inP(e.d)}).forEach(function(e){R.push([fd(e.d),e.n||'','','',fa(e)||''])});
+ R.push(['Feed total','','','',c.fa],[],['ACTUAL PROFIT','','','',c.profit]);
+ var t='\ufeff'+R.map(function(a){return a.map(q).join(',')}).join('\n'),fn=(S.name||'dairy').replace(/\s+/g,'_')+'_'+P.ym+'_'+(P.h==1?'1-15':'16-end')+'.csv';
+ save2(fn,t)}
+function save2(fn,t){if(window.claude&&claude.use){claude.use('downloads').then(function(d){if(!d){fallback(t);return}d.save({filename:fn,data:new Blob([t])}).catch(function(e){if(e&&e.code!='declined')fallback(t)})}).catch(function(){fallback(t)})}else dlf(fn,t)}
+function dlf(fn,t){try{var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/plain'}));a.download=fn;document.body.appendChild(a);a.click();setTimeout(function(){a.remove()},500)}catch(e){fallback(t)}}
+function fallback(t){var w=document.createElement('div');w.className='card';w.innerHTML='<h2>Copy data</h2><textarea style="width:100%;height:160px" readonly></textarea>';w.querySelector('textarea').value=t;$('app').prepend(w);toast('Download unavailable here – copy text')}
+function settings(){return langCard()+'<div class="card"><h2>🏠 Dairy name</h2><label>Your dairy name</label><input id="dn" value="'+esc(S.name)+'" placeholder="e.g. Solankar Dairy"><button class="btn" onclick="sn()">Save name</button></div>'+
+ '<div class="card"><h2>💾 Backup &amp; new phone</h2><div style="color:var(--mu);font-size:14px">Data is saved on this phone and is never erased. To move to a new phone: download backup here, then open the app on the new phone and restore.</div><button class="btn" onclick="bk()">⬇ Download backup</button><label style="margin-top:12px">Restore from backup file</label><input type="file" accept=".json,application/json" onchange="rs(this)"></div>'+
+ '<div class="card"><h2>📲 Install app</h2><div style="color:var(--mu);font-size:14px">Tap the ⬇ Install button on top if shown. Otherwise: browser menu (⋮ or Share) → “Add to Home screen”.</div></div>'}
+function sn(){var v=$('dn').value.trim();if(!v){toast('Enter name');return}S.name=v;save();toast('Saved ✔');tab='entry';render()}
+function bk(){save2((S.name||'dairy').replace(/\s+/g,'_')+'_backup.json',JSON.stringify(S))}
+function rs(i){var f=i.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!d.entries||!d.feeds)throw 0;if(confirm('Restore '+d.entries.length+' milk entries? This replaces data on this phone.')){S=d;save();toast('Restored ✔');tab='entry';render()}}catch(e){toast('Invalid backup file')}};r.readAsText(f)}
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dip=e;$('inst').hidden=false});
+$('inst').onclick=function(){if(dip){dip.prompt();dip=null;$('inst').hidden=true}};
+var D={mr:{},hi:{}},LN={en:'English',mr:'मराठी',hi:'हिन्दी'},KS={};
+[['Milk','दूध','दूध'],['Feed','पशुखाद्य','पशु आहार'],['Report','अहवाल','रिपोर्ट'],['Settings','सेटिंग्ज','सेटिंग'],['⬇ Install','⬇ इन्स्टॉल','⬇ इंस्टॉल'],['Month','महिना','महीना'],['Period','कालावधी','अवधि'],['1 to 15','१ ते १५','1 से 15'],['16 to end','१६ ते महिना अखेर','16 से महीने के अंत तक'],['Add milk','दूध नोंदवा','दूध दर्ज करें'],['Edit milk entry','दूध नोंद बदला','दूध एंट्री बदलें'],['Date (DD/MM/YYYY):','तारीख (DD/MM/YYYY):','तारीख (DD/MM/YYYY):'],['Time','वेळ','समय'],['Morning milk','सकाळचे दूध','सुबह का दूध'],['Morning sale','सकाळची विक्री','सुबह की बिक्री'],['Evening milk','संध्याकाळचे दूध','शाम का दूध'],['Evening sale','संध्याकाळची विक्री','शाम की बिक्री'],['Morning liters','सकाळचे लिटर','सुबह के लीटर'],['Evening liters','संध्याकाळचे लिटर','शाम के लीटर'],['Morning','सकाळ','सुबह'],['Evening','संध्याकाळ','शाम'],['Milk (liters)','दूध (लिटर)','दूध (लीटर)'],['Rate ₹/L','दर ₹/लि','दर ₹/ली'],['(optional)','(ऐच्छिक)','(वैकल्पिक)'],['Don’t know','माहीत नाही','पता नहीं'],['Enter liters','लिटर टाका','लीटर डालें'],['rate not set','दर नाही','दर नहीं'],['price not set','किंमत नाही','कीमत नहीं'],['Save name','नाव जतन करा','नाम सेव करें'],['Save','जतन करा','सेव करें'],['Update','अपडेट','अपडेट'],['Cancel','रद्द करा','रद्द करें'],['Edit cattle feed','पशुखाद्य बदला','पशु आहार बदलें'],['Add cattle feed','पशुखाद्य जोडा','पशु आहार जोड़ें'],['Edit','बदला','बदलें'],['No entries in this period','या कालावधीत नोंद नाही','इस अवधि में कोई एंट्री नहीं'],['No feed entries in this period','या कालावधीत खाद्य नोंद नाही','इस अवधि में कोई आहार एंट्री नहीं'],['Feed entries','खाद्य नोंदी','आहार एंट्रियां'],['Entries','नोंदी','एंट्रियां'],['Feed name','खाद्याचे नाव','आहार का नाम'],['Price ₹','किंमत ₹','कीमत ₹'],['Feed items','खाद्य नोंदी','आहार एंट्री'],['Feed cost','खाद्य खर्च','आहार खर्च'],['Total milk sale','एकूण दूध विक्री','कुल दूध बिक्री'],['Total milk','एकूण दूध','कुल दूध'],['Total liters','एकूण लिटर','कुल लीटर'],['Total sale','एकूण विक्री','कुल बिक्री'],['Actual profit (sale − feed)','खरा नफा (विक्री − खाद्य)','असली मुनाफा (बिक्री − आहार)'],['ACTUAL PROFIT','खरा नफा','असली मुनाफा'],['Feed total','खाद्य एकूण','आहार कुल'],['Feed date','खाद्य तारीख','आहार तारीख'],['Download report (Excel/CSV)','अहवाल डाउनलोड (Excel/CSV)','रिपोर्ट डाउनलोड (Excel/CSV)'],['Print / Save PDF','प्रिंट / PDF जतन','प्रिंट / PDF सेव'],['Day-wise','दिवसानुसार','दिन-वार'],['Date','तारीख','तारीख'],['Today','आज','आज'],['Shift','वेळ','समय'],['Liters','लिटर','लीटर'],['Amount','रक्कम','राशि'],['Price','किंमत','कीमत'],['No data','माहिती नाही','डेटा नहीं'],['milk entries have no rate – only liters counted, not in sale.','दूध नोंदींना दर नाही – फक्त लिटर मोजले, विक्रीत नाही.','दूध एंट्री में दर नहीं – सिर्फ लीटर गिने, बिक्री में नहीं।'],['feed entries have no price – not included, profit may be higher than real.','खाद्य नोंदींना किंमत नाही – खर्चात नाही, नफा प्रत्यक्षापेक्षा जास्त दिसू शकतो.','आहार एंट्री में कीमत नहीं – खर्च में नहीं, मुनाफा असली से ज्यादा दिख सकता है।'],['Language','भाषा','भाषा'],['Your dairy name','तुमच्या डेअरीचे नाव','आपकी डेयरी का नाम'],['Dairy name','डेअरीचे नाव','डेयरी का नाम'],['Backup & new phone','बॅकअप आणि नवीन फोन','बैकअप और नया फोन'],['Data is saved on this phone and is never erased. To move to a new phone: download backup here, then open the app on the new phone and restore.','माहिती या फोनमध्ये जतन राहते, कधीही पुसली जात नाही. नवीन फोनसाठी: इथे बॅकअप डाउनलोड करा, नवीन फोनवर अ‍ॅप उघडून रिस्टोअर करा.','डेटा इसी फोन में सेव रहता है, कभी नहीं मिटता। नए फोन के लिए: यहां बैकअप डाउनलोड करें, नए फोन में ऐप खोलकर रिस्टोर करें।'],['Download backup','बॅकअप डाउनलोड करा','बैकअप डाउनलोड करें'],['Restore from backup file','बॅकअप फाइलमधून रिस्टोअर करा','बैकअप फाइल से रिस्टोर करें'],['Install app','अ‍ॅप इन्स्टॉल करा','ऐप इंस्टॉल करें'],['Tap the ⬇ Install button on top if shown. Otherwise: browser menu (⋮ or Share) → “Add to Home screen”.','वर ⬇ इन्स्टॉल बटन दिसल्यास दाबा. नाहीतर: ब्राउझर मेनू (⋮ किंवा Share) → “Add to Home screen”.','ऊपर ⬇ इंस्टॉल बटन दिखे तो दबाएं। वरना: ब्राउज़र मेनू (⋮ या Share) → “Add to Home screen”।'],['Enter milk liters','दूध लिटर टाका','दूध लीटर डालें'],['Enter feed name','खाद्याचे नाव टाका','आहार का नाम डालें'],['Enter name','नाव टाका','नाम डालें'],['Saved ✔','जतन झाले ✔','सेव हो गया ✔'],['Restored ✔','रिस्टोअर झाले ✔','रिस्टोर हो गया ✔'],['Invalid backup file','चुकीची बॅकअप फाइल','गलत बैकअप फाइल'],['Delete this entry?','ही नोंद काढायची?','यह एंट्री हटाएं?'],['Delete this feed entry?','ही खाद्य नोंद काढायची?','यह आहार एंट्री हटाएं?'],['Download unavailable here – copy text','इथे डाउनलोड शक्य नाही – मजकूर कॉपी करा','यहां डाउनलोड नहीं – टेक्स्ट कॉपी करें'],['Restore','रिस्टोअर','रिस्टोर'],['Rate','दर','दर']].forEach(function(r){D.mr[r[0]]=r[1];D.hi[r[0]]=r[2]});
+function keys(l){return KS[l]||(KS[l]=Object.keys(D[l]).sort(function(a,b){return b.length-a.length}))}
+function tx(s){s=String(s);var d=D[S.lang];if(!d)return s;keys(S.lang).forEach(function(k){if(s.indexOf(k)>=0)s=s.split(k).join(d[k])});return s}
+function lang(){$('lg').textContent='🌐 '+LN[S.lang||'en'];$('inst').textContent=tx('⬇ Install');if(!D[S.lang])return;
+ [$('app'),$('nav')].forEach(function(r){var w=document.createTreeWalker(r,4),n,L=[];while(n=w.nextNode())L.push(n);L.forEach(function(n){if(n.nodeValue.trim())n.nodeValue=tx(n.nodeValue)})});
+ document.querySelectorAll('#app [placeholder]').forEach(function(e){e.placeholder=tx(e.placeholder)})}
+function sl(l){S.lang=l;save();render()}
+$('lg').onclick=function(){var o=['en','mr','hi'];sl(o[(o.indexOf(S.lang||'en')+1)%3])};
+function langCard(){return '<div class="card"><h2>🌐 Language</h2><div class="seg">'+['en','mr','hi'].map(function(l){return '<button class="'+((S.lang||'en')==l?'on':'')+'" onclick="sl(\''+l+'\')">'+LN[l]+'</button>'}).join('')+'</div></div>'}
+function chips(){return '<div class="seg" style="margin-top:8px">'+[1,2,5,10].map(function(n){return '<button class="ib" style="flex:1;padding:12px" onclick="addL('+n+')">+'+n+'</button>'}).join('')+'<button class="ib d" style="flex:1" onclick="keep();F.l=\'\';render()">✕</button></div>'}
+function addL(n){keep();F.l=String(Math.round(((parseFloat(F.l)||0)+n)*100)/100);render()}
+function today(){var td=iso(new Date()),c={ml:0,el:0,a:0};S.entries.filter(function(e){return e.d==td}).forEach(function(e){if(e.s=='M')c.ml+=e.l;else c.el+=e.l;c.a+=e.l*(e.r||0)});
+ return '<div class="card"><h2>📅 Today · '+fd(td)+'</h2><div class="grid"><div class="st"><span>🌅 Morning milk</span><b>'+lit(c.ml)+'</b></div><div class="st"><span>🌙 Evening milk</span><b>'+lit(c.el)+'</b></div><div class="st big"><span>Total milk sale</span><b>'+money(c.a)+'</b></div></div></div>'}
+if(!S.lang){var nl=(navigator.language||'').slice(0,2);S.lang=D[nl]?nl:'en'}
+render();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){});
+</script></body></html>
